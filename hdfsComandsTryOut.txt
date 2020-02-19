@@ -1,0 +1,67 @@
+List all the files and directories under /user/hirw/input in HDFS (Note: paste the command used and output below)
+
+$$ hadoop fs -ls /user/hirw/input
+Found 9 items
+drwxr-xr-x   - hirw hirw          0 2017-01-07 19:59 /user/hirw/input/companies
+drwxr-xr-x   - hirw hirw          0 2017-01-07 19:59 /user/hirw/input/dividends
+drwxr-xr-x   - hirw hirw          0 2017-02-15 02:16 /user/hirw/input/employee-pig
+drwxr-xr-x   - hirw hirw          0 2017-01-07 19:58 /user/hirw/input/facebook
+drwxr-xr-x   - hirw hirw          0 2017-03-25 12:38 /user/hirw/input/hive
+drwxr-xr-x   - hirw hirw          0 2017-01-07 19:58 /user/hirw/input/pagerank
+drwxr-xr-x   - hirw hirw          0 2017-01-07 19:58 /user/hirw/input/songs
+drwxr-xr-x   - hirw hirw          0 2017-04-09 13:46 /user/hirw/input/stocks
+drwxr-xr-x   - hirw hirw          0 2017-01-07 19:58 /user/hirw/input/text-to-pdf
+
+Create a directory with name hdfstest in HDFS (Note: paste the command used and output below)
+$ hadoop fs -mkdir hdfstest
+$ hadoop fs -ls
+Found 1 items
+drwxr-xr-x   - hirwuser1415 hirwuser1415          0 2020-01-31 06:00 hdfstest
+
+Copy the file dwp-payments-april10.csv from /hirw-workshop/input/hdfs (local file system) to hdfstest directory in HDFS
+$ hadoop fs -copyFromLocal /hirw-workshop/input/hdfs/dwp-payments-april10.csv hdfstest
+
+Display the contents of the file dwp-payments-april10.csv under hdfstest in HDFS
+$ hadoop fs -ls hdfstest
+Found 1 items
+-rw-r--r--   3 hirwuser1415 hirwuser1415    3326129 2020-01-31 06:15 hdfstest/dwp-payments-april10.csv
+
+Create a directory with name hdfstest2 in HDFS
+$ hadoop fs -mkdir hdfstest2
+
+Copy the file dwp-payments-april10.csv from hdfstest to hdfstest2 directory in HDFS
+$ hadoop fs -cp hdfstest/dwp-payments-april10.csv hdfstest2
+$ hadoop fs -ls hdfstest2
+Found 1 items
+-rw-r--r--   3 hirwuser1415 hirwuser1415    3326129 2020-01-31 06:29 hdfstest2/dwp-payments-april10.csv
+
+What is the replication factor of dwp-payments-april10.csv under hdfstest in HDFS?
+3
+
+Set the replication factor of dwp-payments-april10.csv under hdfstest directory in HDFS to 2
+$ hadoop fs -Ddfs.replication=2 -cp hdfstest/dwp-payments-april10.csv hdfstest/dwp-payments-april10-2.csv
+
+Bring the file dwp-payments-april10.csv under hdfstest directory in HDFS to the local file system
+$ hadoop fs -copyToLocal hdfstest/dwp-payments-april10.csv
+
+Check the health of hdfstest directory in HDFS
+$ hadoop fs -ls
+Found 2 items
+drwxr-xr-x   - hirwuser1415 hirwuser1415          0 2020-01-31 06:47 hdfstest
+drwxr-xr-x   - hirwuser1415 hirwuser1415          0 2020-01-31 06:29 hdfstest2
+
+Set the recursive permission of hdfstest to 777 (give rwx access to all users) in HDFS
+$ hadoop fs -chmod 777 hdfstest
+$ hadoop fs -chmod 777 hdfstest2
+$ hadoop fs -ls
+Found 2 items
+drwxrwxrwx   - hirwuser1415 hirwuser1415          0 2020-01-31 06:47 hdfstest
+drwxrwxrwx   - hirwuser1415 hirwuser1415          0 2020-01-31 06:29 hdfstest2
+
+Recursively delete hdfstest and hdfstest2 directories in HDFS
+$ hadoop fs -rm -r hdfstest
+Deleted hdfstest
+$ hadoop fs -rm -r hdfstest2
+Deleted hdfstest2
+
+hadoop jar wordCount.jar com.myhadoop.App input output
